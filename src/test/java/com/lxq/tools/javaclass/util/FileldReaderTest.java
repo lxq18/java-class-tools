@@ -2,6 +2,7 @@ package com.lxq.tools.javaclass.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.lxq.tools.javaclass.component.FileldReader;
 import com.lxq.tools.javaclass.dto.CompareFieldRule;
 import com.lxq.tools.javaclass.dto.Fields;
 import com.lxq.tools.javaclass.model.Article2;

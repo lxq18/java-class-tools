@@ -1,4 +1,4 @@
-package com.lxq.tools.javaclass.util;
+package com.lxq.tools.javaclass.component;
 
 import com.lxq.tools.javaclass.dto.CompareFieldResult;
 import com.lxq.tools.javaclass.dto.FieldItem;
