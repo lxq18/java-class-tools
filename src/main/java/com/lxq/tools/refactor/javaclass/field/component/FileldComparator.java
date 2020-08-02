@@ -12,9 +12,13 @@ import java.util.Set;
  * @create 2020/8/1 11:11
  */
 public class FileldComparator {
-
     public CompareFieldResult compare(Class from, Class to) {
-        FileldReader fileldReader = new FileldReader();
+        return compare(from, to, new CompareFieldRule());
+    }
+
+
+    public CompareFieldResult compare(Class from, Class to, CompareFieldRule rule) {
+        FileldReader fileldReader = new FileldReader(rule);
 
         CompareFieldResult result = new CompareFieldResult();
 
@@ -27,7 +31,7 @@ public class FileldComparator {
         List<CompareResultItem> toCompareResult = buildItemString(toFields);
 
         //compare result
-        Set<CompareResultItem> allCompareResult = Sets.newHashSet();
+        Set<CompareResultItem> allCompareResult = Sets.newLinkedHashSet();
         allCompareResult.addAll(fromCompareResult);
         allCompareResult.addAll(toCompareResult);
         allCompareResult.forEach(checkItem -> {

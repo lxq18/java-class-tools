@@ -101,7 +101,7 @@ public class FileldReader {
 
         //自定义类
         aFieldItem.setSubFields(readAllFields((Class<?>) javaFieldType, aFieldItem)
-                        .getItems());
+                .getItems());
         return aFieldItem;
     }
 

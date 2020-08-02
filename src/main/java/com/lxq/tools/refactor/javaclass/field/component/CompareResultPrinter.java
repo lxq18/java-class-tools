@@ -1,6 +1,7 @@
 package com.lxq.tools.refactor.javaclass.field.component;
 
 import com.lxq.tools.refactor.javaclass.field.dto.CompareFieldResult;
+import com.lxq.tools.refactor.javaclass.field.dto.CompareFieldRule;
 import com.lxq.tools.refactor.javaclass.field.dto.CompareResultAnnotation;
 import com.lxq.tools.refactor.javaclass.field.dto.CompareResultItem;
 
@@ -11,8 +12,10 @@ import java.util.List;
  * @create 2020/8/2 10:33
  */
 public class CompareResultPrinter {
-    public static void print(CompareFieldResult compareFieldResult) {
-        compareFieldResult.resetOrder();
+    public static void print(CompareFieldResult compareFieldResult, CompareFieldRule rule) {
+        if (rule.isOrderFields()) {
+            compareFieldResult.resetOrder();
+        }
 
         print(compareFieldResult.getEqualsFields(), "equals");
         print(compareFieldResult.getOnlyFromHasFields(), "only from");
