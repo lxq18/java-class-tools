@@ -14,8 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author lixiaoqiang
@@ -52,7 +51,10 @@ public class FileldReader {
 
         hasReadClassSet.add(obj);
         Field[] javaFields = obj.getDeclaredFields();
-        for (Field f : javaFields) {
+        List<Field> javaFieldList = Arrays.asList(javaFields);
+        //强制顺序，循环引入落入的那个字段尽量统一
+        Collections.sort(javaFieldList, Comparator.comparing(Field::getName));
+        for (Field f : javaFieldList) {
             log.debug("process " + f.getName());
             FieldItem aField = readField(f);
             aField.setSuperFieldItem(superFieldItem);

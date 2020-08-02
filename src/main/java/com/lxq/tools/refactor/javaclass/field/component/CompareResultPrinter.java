@@ -12,6 +12,13 @@ import java.util.List;
  * @create 2020/8/2 10:33
  */
 public class CompareResultPrinter {
+    public static void print(Class from, Class to) {
+        CompareFieldRule rule = new CompareFieldRule().setOrderFields(true);
+        CompareFieldResult result = new FileldComparator()
+                .compare(from, to, rule);
+        CompareResultPrinter.print(result, rule);
+    }
+
     public static void print(CompareFieldResult compareFieldResult, CompareFieldRule rule) {
         if (rule.isOrderFields()) {
             compareFieldResult.resetOrder();
@@ -21,18 +28,24 @@ public class CompareResultPrinter {
         print(compareFieldResult.getOnlyFromHasFields(), "only from");
         print(compareFieldResult.getOnlyToHasFields(), "only to");
         printAnnotation(compareFieldResult.getNonEqualsAnnotation(), "diff annotation");
+
+        System.out.println("\n------------------- 数字统计" + " -------------------");
+        System.out.println(String.format("equals = %s", compareFieldResult.getEqualsFields().size()));
+        System.out.println(String.format("only from = %s", compareFieldResult.getOnlyFromHasFields().size()));
+        System.out.println(String.format("only to = %s", compareFieldResult.getOnlyToHasFields().size()));
+        System.out.println(String.format("diff annotation = %s", compareFieldResult.getNonEqualsAnnotation().size()));
     }
 
     private static void printAnnotation(List<CompareResultAnnotation> nonEqualsAnnotation,
                                         String title) {
-        System.out.println("------------------- " + title + "(total: " + nonEqualsAnnotation.size() + ")" + " -------------------");
+        System.out.println("\n------------------- " + title + "(total: " + nonEqualsAnnotation.size() + ")" + " -------------------");
         nonEqualsAnnotation.forEach(item -> System.out.println(item.getField()
                 + "\t" + item.getType()
                 + "\t" + item.getValue()));
     }
 
     private static void print(List<CompareResultItem> items, String title) {
-        System.out.println("------------------- " + title + "(total: " + items.size() + ")" + " -------------------");
+        System.out.println("\n------------------- " + title + "(total: " + items.size() + ")" + " -------------------");
         items.forEach(item -> {
             System.out.println(item.getFieldWithParent());
         });
