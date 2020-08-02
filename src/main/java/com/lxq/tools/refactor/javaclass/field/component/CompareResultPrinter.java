@@ -1,11 +1,9 @@
 package com.lxq.tools.refactor.javaclass.field.component;
 
-import com.lxq.tools.refactor.javaclass.field.dto.CompareFieldResult;
-import com.lxq.tools.refactor.javaclass.field.dto.CompareFieldRule;
-import com.lxq.tools.refactor.javaclass.field.dto.CompareResultAnnotation;
-import com.lxq.tools.refactor.javaclass.field.dto.CompareResultItem;
+import com.lxq.tools.refactor.javaclass.field.dto.*;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author lixiaoqiang
@@ -24,10 +22,13 @@ public class CompareResultPrinter {
             compareFieldResult.resetOrder();
         }
 
+        printCustomClass(compareFieldResult.getFromFields().getHasReadClassSet(), "from custom class");
+        printCustomClass(compareFieldResult.getToFields().getHasReadClassSet(), "to custom class");
         print(compareFieldResult.getEqualsFields(), "equals");
         print(compareFieldResult.getOnlyFromHasFields(), "only from");
         print(compareFieldResult.getOnlyToHasFields(), "only to");
         printAnnotation(compareFieldResult.getNonEqualsAnnotation(), "diff annotation");
+        printDiffType(compareFieldResult.getNonEqualsType(), "diff type");
 
         System.out.println("\n------------------- 数字统计" + " -------------------");
         System.out.println(String.format("equals = %s", compareFieldResult.getEqualsFields().size()));
@@ -46,8 +47,16 @@ public class CompareResultPrinter {
 
     private static void print(List<CompareResultItem> items, String title) {
         System.out.println("\n------------------- " + title + "(total: " + items.size() + ")" + " -------------------");
-        items.forEach(item -> {
-            System.out.println(item.getFieldWithParent());
-        });
+        items.forEach(item -> System.out.println(item.getFieldWithParent()));
+    }
+
+    private static void printDiffType(List<CompareResultFieldType> items, String title) {
+        System.out.println("\n------------------- " + title + "(total: " + items.size() + ")" + " -------------------");
+        items.forEach(item -> System.out.println(item.getField() + "\t" + item.getFromType() + "\t" + item.getToType()));
+    }
+
+    private static void printCustomClass(Set<Class> classSet, String title) {
+        System.out.println("\n------------------- " + title + "(total: " + classSet.size() + ")" + " -------------------");
+        classSet.forEach(item -> System.out.println("\"" + item.getName() + "\","));
     }
 }

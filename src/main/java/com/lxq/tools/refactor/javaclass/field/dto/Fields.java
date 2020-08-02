@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author lixiaoqiang
@@ -20,6 +21,7 @@ public class Fields {
      * 总自定义类的数量
      */
     private int totalCustomClassNum;
+    private Set<Class> hasReadClassSet;
     private List<FieldItem> items = Lists.newArrayList();
 
     public boolean containsField(FieldItem fieldItem) {

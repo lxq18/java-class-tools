@@ -18,22 +18,32 @@ public class FileldComparator {
 
 
     public CompareFieldResult compare(Class from, Class to, CompareFieldRule rule) {
-        FileldReader fileldReader = new FileldReader(rule);
-
         CompareFieldResult result = new CompareFieldResult();
 
         //from read
-        Fields fromFields = fileldReader.readAllFields(from);
+        Fields fromFields = new FileldReader(rule).readAllFields(from);
         List<CompareResultItem> fromCompareResult = buildItemString(fromFields);
+        result.setFromFields(fromFields);
 
         //to read
-        Fields toFields = fileldReader.readAllFields(to);
+        Fields toFields = new FileldReader(rule).readAllFields(to);
         List<CompareResultItem> toCompareResult = buildItemString(toFields);
+        result.setToFields(toFields);
 
         //compare result
         Set<CompareResultItem> allCompareResult = Sets.newLinkedHashSet();
-        allCompareResult.addAll(fromCompareResult);
-        allCompareResult.addAll(toCompareResult);
+        fromCompareResult.forEach(item -> {
+            if (rule.getIgnoreFromClassList().contains(item.getClazz())) {
+                return;
+            }
+            allCompareResult.add(item);
+        });
+        toCompareResult.forEach(item -> {
+            if (rule.getIgnoreToClassList().contains(item.getClazz())) {
+                return;
+            }
+            allCompareResult.add(item);
+        });
         allCompareResult.forEach(checkItem -> {
             CompareResultItem fromResult = getByName(fromCompareResult, checkItem.getFieldWithParent());
             CompareResultItem toResult = getByName(toCompareResult, checkItem.getFieldWithParent());
@@ -41,6 +51,13 @@ public class FileldComparator {
             //字段相同
             if (fromResult != null && toResult != null) {
                 result.getEqualsFields().add(checkItem);
+
+                //字段类型
+                if (!checkBasicTypeEquals(fromResult.getType(), toResult.getType())) {
+                    result.getNonEqualsType().add(new CompareResultFieldType(checkItem.getFieldWithParent(),
+                            fromResult.getType(),
+                            toResult.getType()));
+                }
 
                 //annotation
                 if (fromResult.getFieldAnnotation() == null
@@ -95,13 +112,54 @@ public class FileldComparator {
         return null;
     }
 
-    private boolean containName(List<CompareResultItem> items, CompareResultItem checkItem) {
-        for (CompareResultItem item : items) {
-            if (checkItem.equals(item)) {
-                return true;
-            }
+    /**
+     * 比较int/Integer等 基本类型
+     *
+     * @param fromType
+     * @param toType
+     * @return 自定义类型直接返回true
+     */
+    private boolean checkBasicTypeEquals(String fromType, String toType) {
+        if (fromType.equals(toType)) {
+            return true;
         }
-        return false;
+        if (fromType.equals("java.util.Map") && toType.equals("com.alibaba.fastjson.JSONObject")) {
+            return false;
+        }
+        if (fromType.equals("com.alibaba.fastjson.JSONObject") && toType.equals("java.util.Map")) {
+            return false;
+        }
+
+        Boolean x = compareBasicAndPack(fromType, toType);
+        if (x != null) return x;
+
+        String javaLang = "java.lang";
+        if (fromType.startsWith(javaLang)
+                && toType.startsWith(javaLang)) {
+            return fromType.equals(toType);
+        }
+
+        return true;
+    }
+
+    /**
+     * 基本类型和包装类型比较
+     *
+     * @param fromType
+     * @param toType
+     * @return
+     */
+    private Boolean compareBasicAndPack(String fromType, String toType) {
+        if (!fromType.contains(".") && !toType.contains(".")) {
+            return fromType.equals(toType);
+        }
+        if (!fromType.contains(".") && toType.contains(".")) {
+            return false;
+        }
+        if (fromType.contains(".") && !toType.contains(".")) {
+            return false;
+        }
+        return null;
     }
 
     private List<CompareResultItem> buildItemString(Fields fields) {
@@ -115,6 +173,8 @@ public class FileldComparator {
             target.add(new CompareResultItem()
                     .setFieldWithParent(
                             item.buildNameWithParent())
+                    .setType(item.getType())
+                    .setClazz(item.getClazz())
                     .setFieldAnnotation(item.getAnnotation())
             );
             addTarget(item.getSubFields(), target);

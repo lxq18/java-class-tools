@@ -10,6 +10,7 @@ import com.lxq.tools.refactor.javaclass.field.dto.FieldAnnotation;
 import com.lxq.tools.refactor.javaclass.field.dto.FieldItem;
 import com.lxq.tools.refactor.javaclass.field.dto.Fields;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -57,6 +58,9 @@ public class FileldReader {
         for (Field f : javaFieldList) {
             log.debug("process " + f.getName());
             FieldItem aField = readField(f);
+            if (aField == null) {
+                continue;
+            }
             aField.setSuperFieldItem(superFieldItem);
             result.getItems()
                     .add(aField);
@@ -64,6 +68,7 @@ public class FileldReader {
 
         //解析类过程中会设置多次，以最后一次为准
         result.setTotalCustomClassNum(this.hasReadClassSet.size());
+        result.setHasReadClassSet(this.hasReadClassSet);
         if (rule.isOrderFields()) {
             result.resetOder();
         }
@@ -74,6 +79,7 @@ public class FileldReader {
         Type javaFieldType = javaField.getGenericType();
         FieldItem aFieldItem = new FieldItem();
         aFieldItem.setName(javaField.getName());
+        aFieldItem.setClazz(javaField.getDeclaringClass().getName());
         aFieldItem.setType(javaFieldType.getTypeName());
 
         //注解
@@ -95,10 +101,15 @@ public class FileldReader {
 
         //int、float、Integer、fastjson等
         if (basicType(javaFieldType)
-                || javaFieldType instanceof JSONObject
-                || javaFieldType instanceof JSONArray
+                || javaFieldType.getTypeName().equals(JSONObject.class.getName())
+                || javaFieldType.getTypeName().equals(JSONArray.class.getName())
                 ) {
             return aFieldItem;
+        }
+
+        //Logger直接忽略
+        if (javaFieldType.getTypeName().equals(Logger.class.getName())) {
+            return null;
         }
 
         //自定义类

@@ -17,6 +17,10 @@ public class CompareResultItem implements Comparable{
     private FieldAnnotation fieldAnnotation;
     private String fieldWithParent;
     private String type;
+    /**
+     * 字段所在的类
+     */
+    private String clazz;
 
     @Override
     public boolean equals(Object o) {

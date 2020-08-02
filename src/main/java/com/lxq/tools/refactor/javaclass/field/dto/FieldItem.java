@@ -19,6 +19,10 @@ public class FieldItem implements Comparable<FieldItem> {
     private String type;
     private FieldAnnotation annotation;
     /**
+     * 字段所在的类
+     */
+    private String clazz;
+    /**
      * 一般业务类型
      */
     private List<FieldItem> subFields = Lists.newArrayList();

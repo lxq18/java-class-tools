@@ -1,8 +1,12 @@
 package com.lxq.tools.refactor.javaclass.field.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.collect.Sets;
 import lombok.Data;
 import lombok.experimental.Accessors;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * 字段比较规则
@@ -37,6 +41,15 @@ public class CompareFieldRule {
      * 排序所有字段
      */
     private boolean orderFields;
+
+    /**
+     * 忽略from关联的类
+     */
+    private Set<String> ignoreFromClassList = Sets.newHashSet();
+    /**
+     * 忽略to关联的类
+     */
+    private Set<String> ignoreToClassList = Sets.newHashSet();
 
     public CompareFieldRule() {
         this.printEqualField = true;

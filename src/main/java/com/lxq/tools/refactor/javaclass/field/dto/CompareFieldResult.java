@@ -12,10 +12,13 @@ import java.util.List;
  */
 @Data
 public class CompareFieldResult {
+    private Fields fromFields;
+    private Fields toFields;
     private List<CompareResultItem> equalsFields = Lists.newArrayList();
     private List<CompareResultItem> onlyFromHasFields = Lists.newArrayList();
     private List<CompareResultItem> onlyToHasFields = Lists.newArrayList();
     private List<CompareResultAnnotation> nonEqualsAnnotation = Lists.newArrayList();
+    private List<CompareResultFieldType> nonEqualsType = Lists.newArrayList();
 
     public void resetOrder() {
         Collections.sort(equalsFields);
