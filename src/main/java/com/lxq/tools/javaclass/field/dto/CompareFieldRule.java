@@ -1,4 +1,4 @@
-package com.lxq.tools.javaclass.dto;
+package com.lxq.tools.javaclass.field.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

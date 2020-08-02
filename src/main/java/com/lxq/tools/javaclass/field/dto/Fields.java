@@ -1,8 +1,9 @@
-package com.lxq.tools.javaclass.dto;
+package com.lxq.tools.javaclass.field.dto;
 
 import com.google.common.collect.Lists;
-import lombok.Data;
-import org.apache.commons.collections.CollectionUtils;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.util.Collections;
 import java.util.List;
@@ -11,7 +12,9 @@ import java.util.List;
  * @author lixiaoqiang
  * @create 2020/8/1 11:32
  */
-@Data
+@Getter
+@Setter
+@Accessors(chain = true)
 public class Fields {
     /**
      * 总自定义类的数量
@@ -37,5 +40,13 @@ public class Fields {
                 resetOder(subGeneric);
             });
         });
+    }
+
+    @Override
+    public String toString() {
+        return "Fields{" +
+                "totalCustomClassNum=" + totalCustomClassNum +
+                ", itemsSize=" + items.size() +
+                '}';
     }
 }

@@ -1,14 +1,14 @@
-package com.lxq.tools.javaclass.component;
+package com.lxq.tools.javaclass.field.component;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.lxq.tools.javaclass.dto.CompareFieldRule;
-import com.lxq.tools.javaclass.dto.FieldAnnotation;
-import com.lxq.tools.javaclass.dto.FieldItem;
-import com.lxq.tools.javaclass.dto.Fields;
+import com.lxq.tools.javaclass.field.dto.CompareFieldRule;
+import com.lxq.tools.javaclass.field.dto.FieldAnnotation;
+import com.lxq.tools.javaclass.field.dto.FieldItem;
+import com.lxq.tools.javaclass.field.dto.Fields;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
@@ -35,6 +35,10 @@ public class FileldReader {
     }
 
     public Fields readAllFields(Class<?> obj) {
+        return readAllFields(obj, null);
+    }
+
+    public Fields readAllFields(Class<?> obj, FieldItem superFieldItem) {
         Fields result = new Fields();
 
         //之前如果解析过，则之后就不解析了，避免类循环引用发生死循环
@@ -51,6 +55,7 @@ public class FileldReader {
         for (Field f : javaFields) {
             log.debug("process " + f.getName());
             FieldItem aField = readField(f);
+            aField.setSuperFieldItem(superFieldItem);
             result.getItems()
                     .add(aField);
         }
@@ -65,24 +70,25 @@ public class FileldReader {
 
     private FieldItem readField(Field javaField) {
         Type javaFieldType = javaField.getGenericType();
-        FieldItem item = new FieldItem();
-        item.setName(javaField.getName());
-        item.setType(javaFieldType);
+        FieldItem aFieldItem = new FieldItem();
+        aFieldItem.setName(javaField.getName());
+        aFieldItem.setType(javaFieldType.getTypeName());
 
         //注解
-        setAnnotation(javaField, item);
+        setAnnotation(javaField, aFieldItem);
 
         //array
         if (javaField.getType().isArray()) {
-            item.setSubFields(
-                    readAllFields(((Class<?>) javaFieldType).getComponentType()).getItems());
-            return item;
+            aFieldItem.setSubFields(readAllFields(((Class<?>) javaFieldType)
+                    .getComponentType(), aFieldItem)
+                    .getItems());
+            return aFieldItem;
         }
 
         //泛型
         if (javaFieldType instanceof ParameterizedType) {
-            initForGenericType(javaField, item);
-            return item;
+            initForGenericType(javaField, aFieldItem);
+            return aFieldItem;
         }
 
         //int、float、Integer、fastjson等
@@ -90,22 +96,21 @@ public class FileldReader {
                 || javaFieldType instanceof JSONObject
                 || javaFieldType instanceof JSONArray
                 ) {
-            return item;
+            return aFieldItem;
         }
 
         //自定义类
-        item.setSubFields(
-                readAllFields((Class<?>) javaFieldType)
+        aFieldItem.setSubFields(readAllFields((Class<?>) javaFieldType, aFieldItem)
                         .getItems());
-        return item;
+        return aFieldItem;
     }
 
-    private void setAnnotation(Field javaField, FieldItem item) {
+    private void setAnnotation(Field javaField, FieldItem fieldItem) {
         if (!rule.isIgnoreFieldAnnotation()
                 && JsonProperty.class.getName().equals(rule.getFieldAnnotation().getName())) {
             JsonProperty jsonProperty = javaField.getAnnotation(JsonProperty.class);
             if (jsonProperty != null) {
-                item.setAnnotation(new FieldAnnotation(
+                fieldItem.setAnnotation(new FieldAnnotation(
                         jsonProperty.annotationType().getName(),
                         jsonProperty.value()
                 ));
@@ -113,15 +118,13 @@ public class FileldReader {
         }
     }
 
-    private void initForGenericType(Field javaField, FieldItem item) {
+    private void initForGenericType(Field javaField, FieldItem fieldItem) {
         Type genericType = javaField.getGenericType();
         List<Class<?>> target = Lists.newArrayList();
         addType(genericType, target);
-        target.forEach(t -> {
-            item.getSubFieldsForGenericType().add(
-                    readAllFields(t)
-                            .getItems());
-        });
+        target.forEach(t -> fieldItem.getSubFieldsForGenericType()
+                .add(readAllFields(t, fieldItem).getItems())
+        );
     }
 
     private void addType(Type type, List<Class<?>> target) {

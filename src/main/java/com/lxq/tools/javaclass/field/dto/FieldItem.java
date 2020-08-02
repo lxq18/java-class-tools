@@ -1,28 +1,41 @@
-package com.lxq.tools.javaclass.dto;
+package com.lxq.tools.javaclass.field.dto;
 
 import com.google.common.collect.Lists;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
-import java.lang.reflect.Type;
 import java.util.List;
 
 /**
  * @author lixiaoqiang
  * @create 2020/8/1 11:13
  */
-@Data
+@Getter
+@Setter
+@Accessors(chain = true)
 public class FieldItem implements Comparable<FieldItem> {
     private String name;
-    private Type type;
+    private String type;
     private FieldAnnotation annotation;
     /**
      * 一般业务类型
      */
-    private List<FieldItem> subFields;
+    private List<FieldItem> subFields = Lists.newArrayList();
     /**
      * 类型信息
      */
     private List<List<FieldItem>> subFieldsForGenericType = Lists.newArrayList();
+    /**
+     * 父级
+     */
+    private FieldItem superFieldItem;
+
+    public String buildNameWithParent() {
+        return superFieldItem == null ? getName()
+                : superFieldItem.buildNameWithParent() + "\t\t." + getName();
+    }
+
 
     @Override
     public boolean equals(Object o) {

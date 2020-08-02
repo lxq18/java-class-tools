@@ -12,4 +12,5 @@ import lombok.Setter;
 public class CommentInfo1 {
     private Long commentId;
     private Integer count;
+    private Integer vote;
 }
