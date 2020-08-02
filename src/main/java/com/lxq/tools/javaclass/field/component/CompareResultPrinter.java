@@ -22,14 +22,14 @@ public class CompareResultPrinter {
 
     private static void printAnnotation(List<CompareResultAnnotation> nonEqualsAnnotation,
                                         String title) {
-        System.out.println("------------------- " + title + " -------------------");
+        System.out.println("------------------- " + title + "(total: " + nonEqualsAnnotation.size() + ")" + " -------------------");
         nonEqualsAnnotation.forEach(item -> System.out.println(item.getField()
                 + "\t" + item.getType()
                 + "\t" + item.getValue()));
     }
 
     private static void print(List<CompareResultItem> items, String title) {
-        System.out.println("------------------- " + title + " -------------------");
+        System.out.println("------------------- " + title + "(total: " + items.size() + ")" + " -------------------");
         items.forEach(item -> {
             System.out.println(item.getFieldWithParent());
         });
