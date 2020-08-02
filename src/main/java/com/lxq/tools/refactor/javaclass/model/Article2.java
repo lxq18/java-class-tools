@@ -1,4 +1,4 @@
-package com.lxq.tools.javaclass.model;
+package com.lxq.tools.refactor.javaclass.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

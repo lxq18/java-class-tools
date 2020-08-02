@@ -1,10 +1,10 @@
-package com.lxq.tools.javaclass.field.component;
+package com.lxq.tools.refactor.javaclass.field.component;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.lxq.tools.javaclass.field.dto.CompareFieldRule;
-import com.lxq.tools.javaclass.field.dto.Fields;
-import com.lxq.tools.javaclass.model.Article2;
+import com.lxq.tools.refactor.javaclass.field.dto.CompareFieldRule;
+import com.lxq.tools.refactor.javaclass.field.dto.Fields;
+import com.lxq.tools.refactor.javaclass.model.Article2;
 import org.junit.Test;
 
 

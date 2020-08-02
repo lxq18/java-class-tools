@@ -1,8 +1,8 @@
-package com.lxq.tools.javaclass.field.component;
+package com.lxq.tools.refactor.javaclass.field.component;
 
-import com.lxq.tools.javaclass.field.dto.CompareFieldResult;
-import com.lxq.tools.javaclass.field.dto.CompareResultAnnotation;
-import com.lxq.tools.javaclass.field.dto.CompareResultItem;
+import com.lxq.tools.refactor.javaclass.field.dto.CompareFieldResult;
+import com.lxq.tools.refactor.javaclass.field.dto.CompareResultAnnotation;
+import com.lxq.tools.refactor.javaclass.field.dto.CompareResultItem;
 
 import java.util.List;
 

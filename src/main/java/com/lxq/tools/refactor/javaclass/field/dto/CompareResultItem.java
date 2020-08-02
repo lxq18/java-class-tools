@@ -1,4 +1,4 @@
-package com.lxq.tools.javaclass.field.dto;
+package com.lxq.tools.refactor.javaclass.field.dto;
 
 import lombok.Getter;
 import lombok.Setter;

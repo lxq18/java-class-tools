@@ -1,4 +1,4 @@
-package com.lxq.tools.javaclass.model;
+package com.lxq.tools.refactor.javaclass.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,8 +9,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class CommentInfo1 {
+public class CommentInfo2 {
     private Long commentId;
     private Integer count;
-    private Integer vote;
+    private User2 user2;
 }

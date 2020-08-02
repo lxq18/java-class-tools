@@ -1,8 +1,9 @@
-package com.lxq.tools.javaclass.field.component;
+package com.lxq.tools.refactor.javaclass.field.component;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.lxq.tools.javaclass.field.dto.*;
+import com.lxq.tools.refactor.javaclass.field.dto.*;
 
 import java.util.List;
 import java.util.Set;

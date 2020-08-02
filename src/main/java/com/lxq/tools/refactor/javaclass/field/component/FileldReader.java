@@ -1,14 +1,14 @@
-package com.lxq.tools.javaclass.field.component;
+package com.lxq.tools.refactor.javaclass.field.component;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.lxq.tools.javaclass.field.dto.CompareFieldRule;
-import com.lxq.tools.javaclass.field.dto.FieldAnnotation;
-import com.lxq.tools.javaclass.field.dto.FieldItem;
-import com.lxq.tools.javaclass.field.dto.Fields;
+import com.lxq.tools.refactor.javaclass.field.dto.CompareFieldRule;
+import com.lxq.tools.refactor.javaclass.field.dto.FieldAnnotation;
+import com.lxq.tools.refactor.javaclass.field.dto.FieldItem;
+import com.lxq.tools.refactor.javaclass.field.dto.Fields;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;

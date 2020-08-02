@@ -1,8 +1,9 @@
-package com.lxq.tools.javaclass.field.dto;
+package com.lxq.tools.refactor.javaclass.field.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 /**
  * 字段注解
@@ -12,12 +13,20 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@Accessors(chain = true)
 @NoArgsConstructor
-public class FieldAnnotation {
+public class CompareResultAnnotation {
+    private String field;
     private String type;
     private String value;
 
-    public FieldAnnotation(String type, String value) {
+    public CompareResultAnnotation(String field, String type, String value) {
+        this.field = field;
+        this.type = type;
+        this.value = value;
+    }
+
+    public CompareResultAnnotation(String type, String value) {
         this.type = type;
         this.value = value;
     }
@@ -27,7 +36,7 @@ public class FieldAnnotation {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        FieldAnnotation that = (FieldAnnotation) o;
+        CompareResultAnnotation that = (CompareResultAnnotation) o;
 
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         return value != null ? value.equals(that.value) : that.value == null;
