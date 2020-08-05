@@ -10,6 +10,13 @@ import java.util.Set;
  * @create 2020/8/2 10:33
  */
 public class CompareResultPrinter {
+    public static void print(Fields fromFields, Fields toFields) {
+        CompareFieldRule rule = new CompareFieldRule().setOrderFields(true);
+        CompareFieldResult result = new FileldComparator()
+                .compare(fromFields, toFields, rule);
+        CompareResultPrinter.print(result, rule);
+    }
+
     public static void print(Class from, Class to) {
         CompareFieldRule rule = new CompareFieldRule().setOrderFields(true);
         CompareFieldResult result = new FileldComparator()

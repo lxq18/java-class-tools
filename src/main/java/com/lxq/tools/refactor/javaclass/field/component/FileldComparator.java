@@ -12,22 +12,20 @@ import java.util.Set;
  * @create 2020/8/1 11:11
  */
 public class FileldComparator {
-    public CompareFieldResult compare(Class from, Class to) {
-        return compare(from, to, new CompareFieldRule());
-    }
-
 
     public CompareFieldResult compare(Class from, Class to, CompareFieldRule rule) {
+        Fields fromFields = new FileldReader(rule).readAllFields(from);
+        Fields toFields = new FileldReader(rule).readAllFields(to);
+        return compare(fromFields, toFields, rule);
+    }
+
+    public CompareFieldResult compare(Fields fromFields, Fields toFields, CompareFieldRule rule) {
         CompareFieldResult result = new CompareFieldResult();
 
-        //from read
-        Fields fromFields = new FileldReader(rule).readAllFields(from);
         List<CompareResultItem> fromCompareResult = buildItemString(fromFields);
-        result.setFromFields(fromFields);
-
-        //to read
-        Fields toFields = new FileldReader(rule).readAllFields(to);
         List<CompareResultItem> toCompareResult = buildItemString(toFields);
+
+        result.setFromFields(fromFields);
         result.setToFields(toFields);
 
         //compare result
@@ -102,6 +100,7 @@ public class FileldComparator {
 
         return result;
     }
+
 
     private CompareResultItem getByName(List<CompareResultItem> items, String name) {
         for (CompareResultItem item : items) {
