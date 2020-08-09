@@ -60,10 +60,19 @@ public class CompareResultPrinter {
     private static void printDiffType(List<CompareResultFieldType> items, String title) {
         System.out.println("\n------------------- " + title + "(total: " + items.size() + ")" + " -------------------");
         items.forEach(item -> System.out.println(item.getField() + "\t" + item.getFromType() + "\t" + item.getToType()));
+
     }
 
     private static void printCustomClass(Set<Class> classSet, String title) {
         System.out.println("\n------------------- " + title + "(total: " + classSet.size() + ")" + " -------------------");
-        classSet.forEach(item -> System.out.println("\"" + item.getName() + "\","));
+        if (classSet == null) {
+            return;
+        }
+        classSet.forEach(item -> {
+            if (item == null) {
+                return;
+            }
+            System.out.println("\"" + item.getName() + "\",");
+        });
     }
 }
